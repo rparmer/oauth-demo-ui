@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Github OAuth Demo UI</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <h1>Github OAuth Demo UI</h1>
+        <h4><a href="/auth/github">Login to Github</a></h4>
+        <div>
+            <br/>
+            <button id="get" type="button" class="btn btn-primary">GET Request</button>
+            <button id="post" type="button" class="btn btn-success">POST Request</button>
+        </div>
+        <div>
+            <br/>
+            <h4>Response: <p id="response"></p></h4>
+        </div>
+    </body>
+</html>
+
+<script>
+    $("#get").click(() => {
+        $.get('/test', (response) => {
+            $("#response").html(response)
+        })
+    })
+    $("#post").click(() => {
+        $.post('/test', {}, (response) => {
+            $("#response").html(response)
+        })
+    })
+</script>
