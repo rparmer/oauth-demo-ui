@@ -1,48 +1,41 @@
 const express = require('express')
 const axios = require('axios')
-const queryString = require('query-string')
-const port = process.env.PORT || 8888
-
-const clientId = '7e110ff6371f99282d05'
-const clientSecret = 'c5f14b040ef65364d5ddb7d3b5631bcc705b59cf'
+const port = process.env.PORT || 5000
 
 const app = express()
 app.use(express.static(__dirname + '/public'))
 
 let token = ''
 
-app.get('/test', (req, res) => {
-    res.send("hello from get")
+app.get('/login', (req, res) => {
+    console.log(req.headers)
+    token = `${req.query.token_type} ${req.query.access_token}`
+    res.redirect('/')
 })
 
-app.post('/test', (req, res) => {
-    if (token) {
-        res.send('authenticated')
-    } else {
-        res.send('please sign in')
-    }
+app.get('/logout', (req, res) => {
+    token = ''
+    res.redirect('/')
 })
 
-app.get('/auth/github', (req, res) => {
-    console.log('auth called')
-    const url = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=http://localhost:${port}/auth/github/callback`
-    res.statusCode = 302
-    res.setHeader('location', url)
-    res.end()
-})
-
-app.get('/auth/github/callback', (req, res) => {
-    console.log('callback called')
-    const code = req.query.code;
+app.get('/test/unsecured', (req, res) => {
     axios({
-        method: 'POST',
-        url: `https://github.com/login/oauth/access_token?client_id=${clientId}&client_secret=${clientSecret}&code=${code}`
-    }).then((response) => {
-        const parsed = queryString.parse(response.data)
-        const accessToken = parsed.access_token
-        token = accessToken
-        console.log(token)
-        res.redirect('/')
+        method: 'GET',
+        url: `http://localhost:8080/greeting/unsecured`
+    }).then(response => {
+        res.send(response.data)
+    })
+})
+
+app.get('/test/secured', (req, res) => {
+    axios({
+        method: 'GET',
+        url: `http://localhost:8080/greeting/secured`,
+        headers: { 'Authorization': token }
+    }).then(response => {
+        res.send(response.data)
+    }).catch(err => {
+        res.send(err.message)
     })
 })
 

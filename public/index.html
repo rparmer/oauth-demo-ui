@@ -9,11 +9,12 @@
     </head>
     <body>
         <h1>Github OAuth Demo UI</h1>
-        <h4><a href="/auth/github">Login to Github</a></h4>
+        <h4><a href="http://localhost:8080/login/github?redirectUrl=http://localhost:5000/login">Login</a></h4>
+        <h4><a href="/logout">Logout</a></h4>
         <div>
             <br/>
-            <button id="get" type="button" class="btn btn-primary">GET Request</button>
-            <button id="post" type="button" class="btn btn-success">POST Request</button>
+            <button id="unsecured" type="button" class="btn btn-primary">GET Unsecured</button>
+            <button id="secured" type="button" class="btn btn-success">GET Secured</button>
         </div>
         <div>
             <br/>
@@ -23,13 +24,13 @@
 </html>
 
 <script>
-    $("#get").click(() => {
-        $.get('/test', (response) => {
+    $("#unsecured").click(() => {
+        $.get('/test/unsecured', (response) => {
             $("#response").html(response)
         })
     })
-    $("#post").click(() => {
-        $.post('/test', {}, (response) => {
+    $("#secured").click(() => {
+        $.get('/test/secured', (response) => {
             $("#response").html(response)
         })
     })
